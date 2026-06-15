@@ -462,7 +462,8 @@ footer {
 <!-- ─── HERO ─────────────────────────────────────────────── -->
 <section id="hero">
   <canvas id="particle-canvas"></canvas>
-  <video id="hero-video" autoplay muted loop playsinline>
+  <video id="hero-video" autoplay muted playsinline>
+    <source src="showreel.webm" type="video/webm">
     <source src="showreel_web.mp4" type="video/mp4">
     <source src="showreel.mp4" type="video/mp4">
   </video>
@@ -491,7 +492,7 @@ footer {
 <section id="philosophy">
   <div>
     <p class="phil-label" data-en="OUR PHILOSOPHY" data-de="UNSERE PHILOSOPHIE">OUR PHILOSOPHY</p>
-    <h2 class="phil-heading" data-en="Creating<br>STUDENT PROJECTS<br>with PASSION." data-de="STUDENTEN PROJEKTE<br>mit LEIDENSCHAFT.">Creating<br>Student projects<br>with passion.</h2>
+    <h2 class="phil-heading" data-en="Creating<br>AA quality<br>with indie<br>resources." data-de="AA-Qualität<br>mit Indie-<br>Ressourcen.">Creating<br>AA quality<br>with indie<br>resources.</h2>
   </div>
   <div class="phil-body">
     <p data-en="We put new twists on working concepts and push boundaries to create fresh, unique experiences." data-de="Wir drehen bekannte Konzepte neu und verschieben Grenzen, um frische, einzigartige Erlebnisse zu schaffen.">We put new twists on working concepts and push boundaries to create fresh, unique experiences.</p>
@@ -750,12 +751,13 @@ Designed with passion and creativity, the game features beautiful 3D miniatures 
   resize(); init(); draw();
 
   const vid = document.getElementById('hero-video');
+  const playBtn = document.getElementById('hero-play');
 
   function showVideo() {
     vid.classList.add('loaded');
     canvas.style.transition = 'opacity 1s';
     canvas.style.opacity = '0';
-    document.getElementById('hero-play').hidden = false;
+    playBtn.hidden = false;
   }
 
   function hideVideo() {
@@ -764,9 +766,17 @@ Designed with passion and creativity, the game features beautiful 3D miniatures 
     canvas.style.opacity = '1';
   }
 
+  function backToParticles() {
+    vid.classList.remove('loaded');
+    canvas.style.transition = 'opacity 1.5s';
+    canvas.style.opacity = '1';
+    vid.muted = true;
+  }
+
   if (vid.querySelector('source')) {
     vid.addEventListener('canplay', showVideo, { once: true });
     vid.addEventListener('error', hideVideo, { once: true });
+    vid.addEventListener('ended', backToParticles);
     // Fallback: wenn nach 8 Sekunden weder canplay noch error — Partikel einblenden lassen
     setTimeout(() => {
       if (!vid.classList.contains('loaded') && vid.style.display !== 'none') {
@@ -780,8 +790,14 @@ Designed with passion and creativity, the game features beautiful 3D miniatures 
 /* ── HERO PLAY ─────────────────────────────────────────── */
 document.getElementById('hero-play').addEventListener('click', function() {
   const vid = document.getElementById('hero-video');
+  const canvas = document.getElementById('particle-canvas');
+  vid.muted = false;
+  vid.currentTime = 0;
+  vid.play();
+  vid.classList.add('loaded');
+  canvas.style.transition = 'opacity 1s';
+  canvas.style.opacity = '0';
   if (vid.requestFullscreen) vid.requestFullscreen();
-  vid.muted = false; vid.play();
 });
 
 /* ── NAV SCROLL ─────────────────────────────────────────── */
