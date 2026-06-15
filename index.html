@@ -463,6 +463,8 @@ footer {
 <section id="hero">
   <canvas id="particle-canvas"></canvas>
   <video id="hero-video" autoplay muted loop playsinline>
+    <source src="showreel.webm" type="video/webm">
+    <source src="showreel_web.mp4" type="video/mp4">
     <source src="showreel.mp4" type="video/mp4">
   </video>
   <div class="hero-corner tl">3NOODLES STUDIO · NEU-ULM</div>
@@ -816,7 +818,7 @@ const dotObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) updateLineToItem(entry.target);
   });
-}, { threshold: 0.5 });
+}, { threshold: 0.3, rootMargin: '-30% 0px -60% 0px' });
 
 // Slide-in observer
 const slideObserver = new IntersectionObserver((entries) => {
