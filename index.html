@@ -751,13 +751,30 @@ Designed with passion and creativity, the game features beautiful 3D miniatures 
   resize(); init(); draw();
 
   const vid = document.getElementById('hero-video');
+
+  function showVideo() {
+    vid.classList.add('loaded');
+    canvas.style.transition = 'opacity 1s';
+    canvas.style.opacity = '0';
+    document.getElementById('hero-play').hidden = false;
+  }
+
+  function hideVideo() {
+    // Video nicht abspielbar — Partikel bleiben sichtbar, Video bleibt versteckt
+    vid.style.display = 'none';
+    canvas.style.opacity = '1';
+  }
+
   if (vid.querySelector('source')) {
-    vid.addEventListener('canplay', () => {
-      vid.classList.add('loaded');
-      canvas.style.transition = 'opacity 1s';
-      canvas.style.opacity = '0';
-      document.getElementById('hero-play').hidden = false;
-    });
+    vid.addEventListener('canplay', showVideo, { once: true });
+    vid.addEventListener('error', hideVideo, { once: true });
+    // Fallback: wenn nach 8 Sekunden weder canplay noch error — Partikel einblenden lassen
+    setTimeout(() => {
+      if (!vid.classList.contains('loaded') && vid.style.display !== 'none') {
+        hideVideo();
+      }
+    }, 8000);
+    vid.load();
   }
 })();
 
